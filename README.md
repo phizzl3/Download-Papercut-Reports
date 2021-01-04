@@ -10,7 +10,7 @@ Additional requirements:
 * Gmail API will need to be enabled on account
 * credentials.json file from Gmail (Downloaded) (stored in ./private)
 * token.pickle file from Gmail (Generated) (stored in ./private)
-* data.py file containing search tags (stored in ./private)
+* data.py file containing search tags (stored in ./private)  
 Instructions for the above can be found at:  
 https://developers.google.com/gmail/api/quickstart/python
 
