@@ -26,7 +26,7 @@ What it does:
   in the user's Home / Downloads folder
 * Marks messages Read and Archives them when done
 
-Big thanks to BW1ll (https://github.com/BW1ll) for helping figure out 
+Big thanks to **BW1ll** (https://github.com/BW1ll) for helping figure out 
 and for writing a big chunk of this code! 
 
 Requirements: 
