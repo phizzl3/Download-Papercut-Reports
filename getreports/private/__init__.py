@@ -1,0 +1,1 @@
+# I've dropped some unused files in this folder to show the required structure

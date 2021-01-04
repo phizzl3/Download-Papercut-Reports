@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+getreports/private/credentials.json
+getreports/private/data.py
+getreports/private/token.pickle
