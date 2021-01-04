@@ -130,7 +130,7 @@ class Gmail:
             self
         """
 
-        # Check to make sure object has 'messages' attirbute and
+        # Check to make sure object has 'messages' attribute and
         # call 'get_messages' method if it's missing
         if not hasattr(self, 'messages'):
             self.get_messages()
