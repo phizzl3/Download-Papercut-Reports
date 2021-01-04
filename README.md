@@ -11,6 +11,7 @@ Additional requirements:
 * credentials.json file from Gmail (Downloaded) (stored in ./private)
 * token.pickle file from Gmail (Generated) (stored in ./private)
 * data.py file containing search tags (stored in ./private)  
+
 Instructions for the above can be found at:  
 https://developers.google.com/gmail/api/quickstart/python
 
@@ -18,7 +19,7 @@ What it does:
 
 * Connects to Gmail API
 * Checks for credentials & token
-  * Generates token if exist using credentials from Gmail
+  * Generates token if it doesn't exist using credentials from Gmail
 * Searches Gmail for Unread messages from PaperCut with attachments
 * Gets all of those messages
 * Downloads and renames the attachments based on location
