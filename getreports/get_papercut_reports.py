@@ -61,11 +61,11 @@ REPORT_DT_RE = r'(([A-Z][a-z]{2})\s\d,\s(\d{4}))'
 
 class Gmail:
     """Object initialization and a couple of methods for working with Gmail 
-    for downloading messages and PaperCut attachments.
+    for downloading messages and PaperCut attachments and editing tags.
     """
 
     def __init__(self):
-        """Initialize Gmail object - Gets gmail credentials and access token 
+        """Initialize Gmail object - Gets Gmail credentials and access token 
         and uses them to build an access service instance for Gmail account.
         """
 
@@ -124,7 +124,7 @@ class Gmail:
         """Searches attached messages details for subject line and attachments. 
         Downloads and renames the located attachments based on subject and filename, 
         and saves to a specified output (Downloads/{Date}) folder.
-        Marks each message as read and archives when done downloading. 
+        Marks each message as Read and archives when done downloading. 
 
         Returns:
             self
@@ -135,7 +135,7 @@ class Gmail:
         if not hasattr(self, 'messages'):
             self.get_messages()
 
-        # Run only if the messages attr list isn't empty
+        # Run only if the messages attribute list isn't empty
         if self.messages:
             try:
                 # Loop through individual messages to access contents/payload
@@ -160,7 +160,7 @@ class Gmail:
                     printer_groups = re.search(PRINTER_GRP_RE, subject)
                     report_date = re.search(REPORT_DT_RE, subject)
 
-                    # Dictionary used to get month number to match current 
+                    # Dictionary used to get month number to match current
                     # folder-naming structure for output. ex: '01 Jan 20'
                     months = {'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04',
                               'May': '05', 'Jun': '06', 'Jul': '07', 'Aug': '08',
@@ -169,7 +169,7 @@ class Gmail:
                     # Generate ouput folder name
                     folder_name = f'{months.get(report_date.group(2))} {report_date.group(2)} {report_date.group(3)[2:]}'
 
-                    # Check for output folder in user's home 'Downloads' folder,
+                    # Check for output folder in user's Home / 'Downloads' folder,
                     # create if doesn't exist and set as target directory
                     Path.mkdir(Path.home() / 'Downloads' / folder_name, exist_ok=True)
                     out_directory = f'{Path.home()}/Downloads/{folder_name}/'
@@ -199,7 +199,7 @@ class Gmail:
                         f.write(output_file)
                         print(f' {out_filename} as been created')
 
-                    # Mark message as read and archive (remove labels)
+                    # Mark message as read and archive (remove labels) and print to console
                     self.service.users().messages().modify(
                         userId='me',
                         id=message.get('id'),
