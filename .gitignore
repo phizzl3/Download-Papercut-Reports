@@ -130,3 +130,4 @@ dmypy.json
 getreports/private/credentials.json
 getreports/private/data.py
 getreports/private/token.pickle
+.vscode/settings.json
