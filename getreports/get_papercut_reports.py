@@ -52,11 +52,11 @@ CREDSJSON = Path(__file__).resolve().parent / 'private' / 'credentials.json'
 
 # Regex search patterns for subject line in emails
 # School name
-EXECUTIVE_SUM_RE = r'(:\s(.+)\sE)'
+EXECUTIVE_SUM_RE = re.compile(r'(:\s(.+)\sE)')
 # Printer groups
-PRINTER_GRP_RE = r'(P[a-z].+- (s[a-z]{6}[A-Z]{3}?|s[a-z]{6}))'
+PRINTER_GRP_RE = re.compile(r'(P[a-z].+- (s[a-z]{6}[A-Z]{3}?|s[a-z]{6}))')
 # Report date
-REPORT_DT_RE = r'(([A-Z][a-z]{2})\s\d,\s(\d{4}))'
+REPORT_DT_RE = re.compile(r'(([A-Z][a-z]{2})\s\d,\s(\d{4}))')
 
 
 class Gmail:
