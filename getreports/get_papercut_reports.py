@@ -52,11 +52,11 @@ CREDSJSON = Path(__file__).resolve().parent / 'private' / 'credentials.json'
 
 # Regex search patterns for subject line in emails
 # School name
-EXECUTIVE_SUM_RE = r'(:\s(.+)\sE)'
+EXECUTIVE_SUM_RE = re.compile(r'(:\s(.+)\sE)')
 # Printer groups
-PRINTER_GRP_RE = r'(P[a-z].+- (s[a-z]{6}[A-Z]{3}?|s[a-z]{6}))'
+PRINTER_GRP_RE = re.compile(r'(P[a-z].+- (s[a-z]{6}[A-Z]{3}?|s[a-z]{6}))')
 # Report date
-REPORT_DT_RE = r'(([A-Z][a-z]{2})\s\d,\s(\d{4}))'
+REPORT_DT_RE = re.compile(r'(([A-Z][a-z]{2})\s\d,\s(\d{4}))')
 
 
 class Gmail:
@@ -156,9 +156,9 @@ class Gmail:
                     executive_summary, printer_groups, name_part = 0, 0, 0
 
                     # Search subject line for Regex patterns
-                    executive_summary = re.search(EXECUTIVE_SUM_RE, subject)
-                    printer_groups = re.search(PRINTER_GRP_RE, subject)
-                    report_date = re.search(REPORT_DT_RE, subject)
+                    executive_summary = EXECUTIVE_SUM_RE.search(subject)
+                    printer_groups = PRINTER_GRP_RE.search(subject)
+                    report_date = REPORT_DT_RE.search(subject)
 
                     # Dictionary used to get month number to match current
                     # folder-naming structure for output. ex: '01 Jan 20'
