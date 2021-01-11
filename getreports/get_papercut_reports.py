@@ -156,9 +156,9 @@ class Gmail:
                     executive_summary, printer_groups, name_part = 0, 0, 0
 
                     # Search subject line for Regex patterns
-                    executive_summary = re.search(EXECUTIVE_SUM_RE, subject)
-                    printer_groups = re.search(PRINTER_GRP_RE, subject)
-                    report_date = re.search(REPORT_DT_RE, subject)
+                    executive_summary = EXECUTIVE_SUM_RE.search(subject)
+                    printer_groups = PRINTER_GRP_RE.search(subject)
+                    report_date = REPORT_DT_RE.search(subject)
 
                     # Dictionary used to get month number to match current
                     # folder-naming structure for output. ex: '01 Jan 20'
