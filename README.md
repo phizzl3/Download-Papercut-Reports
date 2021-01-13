@@ -37,5 +37,5 @@ Requirements:
 * google-auth-oauthlib
 
 ```bash
-pip install -r requirements.txt
+$ pip install -r requirements.txt
 ```
