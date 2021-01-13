@@ -1,32 +1,7 @@
-"""This is written specifically for my use case and works while logged 
-in as a single user to download reports from a Gmail account. 
-
-Additional requirements:
-
-* Gmail API will need to be enabled on account
-* credentials.json file from Gmail (Downloaded) (stored in ./private)
-* token.pickle file from Gmail (Generated) (stored in ./private)
-* data.py file containing search tags (stored in ./private)  
-
-Instructions for the above can be found at:  
-https://developers.google.com/gmail/api/quickstart/python
-
-What it does:
-
-* Connects to Gmail API
-* Checks for credentials & token
-  * Generates token if it doesn't exist using credentials from Gmail
-* Searches Gmail for Unread messages from PaperCut with attachments
-* Gets all of those messages
-* Downloads and renames the attachments based on location
-* Outputs the attachments to a folder based on report date located
-  in the user's Home / Downloads folder
-* Marks messages Read and Archives them when done
-
-Big thanks to BW1ll (https://github.com/BW1ll) for helping figure out 
-and for writing a big chunk of this code! 
+#!/usr/bin/env python3
 """
-
+See README.md for info
+"""
 
 import base64
 import pickle
@@ -39,6 +14,7 @@ from googleapiclient.discovery import build
 
 # Contains the tags needed to find the messages
 from private.data import QUERY
+
 
 # These are the access "Scopes" that this application will
 # have to the Gmail account. (Read and modify Messages)
@@ -60,12 +36,14 @@ REPORT_DT_RE = re.compile(r'(([A-Z][a-z]{2})\s\d,\s(\d{4}))')
 
 
 class Gmail:
-    """Object initialization and a couple of methods for working with Gmail 
+    """
+    Object initialization and a couple of methods for working with Gmail 
     for downloading messages and PaperCut attachments and editing tags.
     """
 
     def __init__(self):
-        """Initialize Gmail object - Gets Gmail credentials and access token 
+        """
+        Initialize Gmail object - Gets Gmail credentials and access token 
         and uses them to build an access service instance for Gmail account.
         """
 
@@ -95,7 +73,8 @@ class Gmail:
         self.service = build('gmail', 'v1', credentials=creds)
 
     def get_messages(self):
-        """Uses Gmail service to pull a list of email messages based 
+        """
+        Uses Gmail service to pull a list of email messages based 
         on a specified search query.
 
         Returns:
@@ -121,7 +100,8 @@ class Gmail:
         return self
 
     def get_attachments(self):
-        """Searches attached messages details for subject line and attachments. 
+        """
+        Searches attached messages details for subject line and attachments. 
         Downloads and renames the located attachments based on subject and filename, 
         and saves to a specified output (Downloads/{Date}) folder.
         Marks each message as Read and archives when done downloading. 
@@ -214,14 +194,15 @@ class Gmail:
 
 
 def get_reports():
-    """Generate Gmail object and call methods to get email 
+    """
+    Generate Gmail object and call methods to get email 
     messages and needed attachments for file output.
     """
 
-    print('\n This downloads and saves PaperCut attachments from UNREAD')
-    print(' messages in the CopierSupport INBOX. Messages NOT marked')
-    print(' UNREAD or located outside the INBOX will be ignored.')
-    print(' Files output to "User/Downloads/" folder by date.')
+    print('\n This downloads and saves PaperCut attachments from UNREAD'.center(58))
+    print(' messages in the CopierSupport INBOX. Messages NOT marked'.center(58))
+    print(' UNREAD or located outside the INBOX will be ignored.'.center(58))
+    print(' Files output to "User/Downloads/" folder by date.'.center(58))
     input('\n Press ENTER to continue...')
 
     email = Gmail()
