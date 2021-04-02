@@ -190,13 +190,13 @@ class Gmail:
 
                     # Combine expression from subject with filename
                     # for output file
-                    out_filename = f"{name_part} {message_parts[1]['filename']}"
+                    out_file = f"{name_part} {message_parts[1]['filename']}"
 
                     # Save attachment to folder with new filename and
                     # print to console
-                    with open(f'{out_directory}{out_filename}', 'wb') as f:
+                    with open(f'{out_directory}{out_file}', 'wb') as f:
                         f.write(output_file)
-                        print(f' {out_filename} as been created')
+                        print(f' {out_file} as been created')
 
                     # Mark message as read and archive (remove labels)
                     # and print to console
