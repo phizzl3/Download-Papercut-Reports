@@ -11,10 +11,10 @@ from pathlib import Path
 from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
+from tqdm import tqdm
 
 # Contains the tags needed to find the messages
 from private.data import QUERY
-
 
 # These are the access "Scopes" that this application will
 # have to the Gmail account. (Read and modify Messages)
@@ -126,7 +126,7 @@ class Gmail:
             try:
                 # Loop through individual messages to access
                 # contents/payload
-                for message in self.messages:
+                for message in tqdm(self.messages):
                     message_details = self.service.users().messages().get(
                         userId='me',
                         id=message['id']
@@ -181,10 +181,10 @@ class Gmail:
                     # data and set variable
                     attachment = (
                         self.service.users().messages().attachments().get(
-                        userId='me',
-                        messageId=message['id'],
-                        id=message_parts[1]['body']['attachmentId']
-                    ).execute()
+                            userId='me',
+                            messageId=message['id'],
+                            id=message_parts[1]['body']['attachmentId']
+                        ).execute()
                     )
 
                     # Decode attachment data and set variable
