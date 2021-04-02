@@ -196,19 +196,15 @@ class Gmail:
                     out_file = f"{name_part} {message_parts[1]['filename']}"
 
                     # Save attachment to folder with new filename and
-                    # print to console
                     with open(f'{out_directory}{out_file}', 'wb') as f:
                         f.write(output_file)
-                        print(f' {out_file} as been created')
 
                     # Mark message as read and archive (remove labels)
-                    # and print to console
                     self.service.users().messages().modify(
                         userId='me',
                         id=message.get('id'),
                         body={'removeLabelIds': ['UNREAD', 'INBOX']}
                     ).execute()
-                    print(' Marked as Read and Archived.')
 
             except Exception as e:
                 print(f' An error has occurred: \n {e}')
