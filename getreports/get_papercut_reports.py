@@ -37,26 +37,30 @@ REPORT_DT_RE = re.compile(r'(([A-Z][a-z]{2})\s\d,\s(\d{4}))')
 
 class Gmail:
     """
-    Object initialization and a couple of methods for working with Gmail 
-    for downloading messages and PaperCut attachments and editing tags.
+    Object initialization and a couple of methods for working with 
+    Gmail for downloading messages and PaperCut attachments and 
+    editing tags.
     """
 
     def __init__(self):
         """
-        Initialize Gmail object - Gets Gmail credentials and access token 
-        and uses them to build an access service instance for Gmail account.
+        Initialize Gmail object - Gets Gmail credentials and access 
+        token and uses them to build an access service instance for 
+        Gmail account.
         """
 
         # Reset variable
         creds = None
 
-        # The file token.pickle stores the user's access and refresh tokens, and is
-        # created automatically when the authorization flow completes for the first time
+        # The file token.pickle stores the user's access and refresh
+        # tokens, and is created automatically when the authorization
+        # flow completes for the first time.
         if Path(TOKENFILE).exists():
             with open(TOKENFILE, 'rb') as token:
                 creds = pickle.load(token)
 
-        # If there are no (valid) credentials available, let the user log in.
+        # If there are no (valid) credentials available, let the
+        # user log in.
         if not creds or not creds.valid:
             if creds and creds.expired and creds.refresh_token:
                 creds.refresh(Request())
@@ -87,7 +91,8 @@ class Gmail:
             q=QUERY
         ).execute()
 
-        # Add list of messages to 'messages' attribute or blank list if none found
+        # Add list of messages to 'messages' attribute or blank list
+        # if none found.
         self.messages = results.get('messages', [])
 
         # Display total matching messages found to console
@@ -101,10 +106,11 @@ class Gmail:
 
     def get_attachments(self):
         """
-        Searches attached messages details for subject line and attachments. 
-        Downloads and renames the located attachments based on subject and filename, 
-        and saves to a specified output (Downloads/{Date}) folder.
-        Marks each message as Read and archives when done downloading. 
+        Searches attached messages details for subject line and 
+        attachments. Downloads and renames the located attachments 
+        based on subject and filename, and saves to a specified output 
+        (Downloads/{Date}) folder. Marks each message as Read and 
+        archives when done downloading. 
 
         Returns:
             self
@@ -118,21 +124,25 @@ class Gmail:
         # Run only if the messages attribute list isn't empty
         if self.messages:
             try:
-                # Loop through individual messages to access contents/payload
+                # Loop through individual messages to access
+                # contents/payload
                 for message in self.messages:
                     message_details = self.service.users().messages().get(
                         userId='me',
                         id=message['id']
                     ).execute()
 
-                    # Set a couple of quick variables to save some typing later
-                    # Payload is where the majority of the good stuff is
+                    # Set a couple of quick variables to save
+                    # some typing later.
+                    # Payload is where the majority of the
+                    # good stuff is.
                     # Parts is where the attachments info is
                     payload = message_details['payload']
                     subject = payload['headers'][21]['value']
                     message_parts = payload['parts']
 
-                    # Reset variables needed for next step for additional loops
+                    # Reset variables needed for next step for
+                    # additional loops
                     executive_summary, printer_groups, name_part = 0, 0, 0
 
                     # Search subject line for Regex patterns
@@ -140,27 +150,34 @@ class Gmail:
                     printer_groups = PRINTER_GRP_RE.search(subject)
                     report_date = REPORT_DT_RE.search(subject)
 
-                    # Dictionary used to get month number to match current
-                    # folder-naming structure for output. ex: '01 Jan 20'
-                    months = {'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04',
-                              'May': '05', 'Jun': '06', 'Jul': '07', 'Aug': '08',
-                              'Sep': '09', 'Oct': '10', 'Nov': '11', 'Dec': '12'}
+                    # Dictionary used to get month number to match
+                    # current folder-naming structure for output.
+                    # ex: '01 Jan 20'
+                    months = {'Jan': '01', 'Feb': '02', 'Mar': '03',
+                              'Apr': '04', 'May': '05', 'Jun': '06',
+                              'Jul': '07', 'Aug': '08', 'Sep': '09',
+                              'Oct': '10', 'Nov': '11', 'Dec': '12'}
 
                     # Generate ouput folder name
-                    folder_name = f'{months.get(report_date.group(2))} {report_date.group(2)} {report_date.group(3)[2:]}'
+                    folder_name = (f'{months.get(report_date.group(2))} '
+                                   f'{report_date.group(2)} {report_date.group(3)[2:]}')
 
-                    # Check for output folder in user's Home / 'Downloads' folder,
+                    # Check for output folder in user's
+                    # Home / 'Downloads' folder,
                     # create if doesn't exist and set as target directory
-                    Path.mkdir(Path.home() / 'Downloads' / folder_name, exist_ok=True)
+                    Path.mkdir(Path.home() / 'Downloads' / folder_name,
+                               exist_ok=True)
                     out_directory = f'{Path.home()}/Downloads/{folder_name}/'
 
-                    # Set output name part variable based on which Regex is found
+                    # Set output name part variable based on which
+                    # Regex is found
                     if executive_summary:
                         name_part = executive_summary.group(2)
                     elif printer_groups:
                         name_part = printer_groups.group(1)
 
-                    # Use Gmail service to get (encoded) attachment data and set variable
+                    # Use Gmail service to get (encoded) attachment
+                    # data and set variable
                     attachment = self.service.users().messages().attachments().get(
                         userId='me',
                         messageId=message['id'],
@@ -171,15 +188,18 @@ class Gmail:
                     output_file = base64.urlsafe_b64decode(
                         attachment['data'].encode('UTF-8'))
 
-                    # Combine expression from subject with filename for output file
+                    # Combine expression from subject with filename
+                    # for output file
                     out_filename = f"{name_part} {message_parts[1]['filename']}"
 
-                    # Save attachment to folder with new filename and print to console
+                    # Save attachment to folder with new filename and
+                    # print to console
                     with open(f'{out_directory}{out_filename}', 'wb') as f:
                         f.write(output_file)
                         print(f' {out_filename} as been created')
 
-                    # Mark message as read and archive (remove labels) and print to console
+                    # Mark message as read and archive (remove labels)
+                    # and print to console
                     self.service.users().messages().modify(
                         userId='me',
                         id=message.get('id'),
@@ -199,10 +219,10 @@ def get_reports():
     messages and needed attachments for file output.
     """
 
-    print('\n This downloads and saves PaperCut attachments from UNREAD'.center(58))
-    print(' messages in the CopierSupport INBOX. Messages NOT marked'.center(58))
-    print(' UNREAD or located outside the INBOX will be ignored.'.center(58))
-    print(' Files output to "User/Downloads/" folder by date.'.center(58))
+    print('\n This downloads and saves PaperCut attachments from UNREAD '
+          'messages in the CopierSupport INBOX.\n Messages NOT marked UNREAD '
+          'or located outside the INBOX will be ignored.\n Files output to '
+          '"User/Downloads/" folder by date.')
     input('\n Press ENTER to continue...')
 
     email = Gmail()
