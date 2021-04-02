@@ -160,7 +160,8 @@ class Gmail:
 
                     # Generate ouput folder name
                     folder_name = (f'{months.get(report_date.group(2))} '
-                                   f'{report_date.group(2)} {report_date.group(3)[2:]}')
+                                   f'{report_date.group(2)} '
+                                   f'{report_date.group(3)[2:]}')
 
                     # Check for output folder in user's
                     # Home / 'Downloads' folder,
@@ -178,11 +179,13 @@ class Gmail:
 
                     # Use Gmail service to get (encoded) attachment
                     # data and set variable
-                    attachment = self.service.users().messages().attachments().get(
+                    attachment = (
+                        self.service.users().messages().attachments().get(
                         userId='me',
                         messageId=message['id'],
                         id=message_parts[1]['body']['attachmentId']
                     ).execute()
+                    )
 
                     # Decode attachment data and set variable
                     output_file = base64.urlsafe_b64decode(
