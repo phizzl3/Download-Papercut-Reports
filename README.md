@@ -1,4 +1,4 @@
-# get-papercut-reports
+# Download-Papercut-Reports
 
 Download PaperCut reports using Gmail API
 
